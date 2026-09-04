@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ni.edu.uam.menu.ProductoController"
+            prefWidth="900" prefHeight="650">
+
+    <top>
+        <VBox>
+            <!-- Encabezado -->
+            <VBox alignment="CENTER_LEFT" spacing="2">
+                <padding>
+                    <Insets top="14" right="16" bottom="10" left="16"/>
+                </padding>
+                <Label text="🏬 Distribuidora El Güegüense">
+                    <font>
+                        <Font name="System Bold" size="22"/>
+                    </font>
+                </Label>
+                <Label text="Gestión de inventario de productos">
+                    <font>
+                        <Font name="System Italic" size="13"/>
+                    </font>
+                </Label>
+            </VBox>
+
+            <Separator/>
+
+            <!-- MenuBar: acciones agrupadas por categoría, con atajos de teclado -->
+            <MenuBar>
+                <Menu text="Archivo">
+                    <MenuItem text="🆕 Nuevo" accelerator="Shortcut+N" onAction="#nuevoProducto"/>
+                    <MenuItem text="💾 Guardar" accelerator="Shortcut+G" onAction="#guardarProducto"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="🚪 Salir" accelerator="Shortcut+Q" onAction="#salirAplicacion"/>
+                </Menu>
+                <Menu text="Producto">
+                    <MenuItem text="✏️ Editar" onAction="#editarProducto"/>
+                    <MenuItem text="🗑️ Eliminar" onAction="#eliminarProducto"/>
+                </Menu>
+                <Menu text="Ayuda">
+                    <MenuItem text="ℹ️ Acerca de" onAction="#mostrarAcercaDe"/>
+                </Menu>
+            </MenuBar>
+
+            <!-- ToolBar: mismos métodos del controlador que el MenuBar y el ContextMenu -->
+            <ToolBar>
+                <Button text="🆕 Nuevo" onAction="#nuevoProducto">
+                    <tooltip>
+                        <Tooltip text="Limpiar el formulario para registrar un producto nuevo (Ctrl+N)"/>
+                    </tooltip>
+                </Button>
+                <Button text="💾 Guardar" onAction="#guardarProducto">
+                    <tooltip>
+                        <Tooltip text="Guardar el producto nuevo o los cambios del seleccionado (Ctrl+G)"/>
+                    </tooltip>
+                </Button>
+                <Separator orientation="VERTICAL"/>
+                <Button text="✏️ Editar" onAction="#editarProducto">
+                    <tooltip>
+                        <Tooltip text="Cargar el producto seleccionado en el formulario"/>
+                    </tooltip>
+                </Button>
+                <Button text="🗑️ Eliminar" onAction="#eliminarProducto">
+                    <tooltip>
+                        <Tooltip text="Eliminar el producto seleccionado de la tabla"/>
+                    </tooltip>
+                </Button>
+                <Separator orientation="VERTICAL"/>
+                <Button text="🚪 Salir" onAction="#salirAplicacion">
+                    <tooltip>
+                        <Tooltip text="Cerrar la aplicación (Ctrl+Q)"/>
+                    </tooltip>
+                </Button>
+            </ToolBar>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="14">
+            <padding>
+                <Insets top="14" right="16" bottom="14" left="16"/>
+            </padding>
+
+            <!-- Formulario de datos del producto -->
+            <TitledPane text="📋 Datos del producto" collapsible="false">
+                <GridPane hgap="12" vgap="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                    <Label text="Código:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                    <TextField fx:id="codigoField" promptText="Ej. P004" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                    <Label text="Nombre:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                    <TextField fx:id="nombreField" promptText="Nombre del producto" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+
+                    <Label text="Categoría:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                    <TextField fx:id="categoriaField" promptText="Ej. Abarrotes" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                    <Label text="Precio (C\$):" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+                    <TextField fx:id="precioField" promptText="0.00" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+
+                    <Label text="Existencia:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                    <TextField fx:id="existenciaField" promptText="0" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                </GridPane>
+            </TitledPane>
+
+            <!-- Tabla de productos con menú contextual -->
+            <TitledPane text="📦 Inventario" collapsible="false" VBox.vgrow="ALWAYS">
+                <TableView fx:id="tablaProductos">
+                    <columns>
+                        <TableColumn fx:id="colCodigo" text="Código" prefWidth="90"/>
+                        <TableColumn fx:id="colNombre" text="Nombre" prefWidth="220"/>
+                        <TableColumn fx:id="colCategoria" text="Categoría" prefWidth="150"/>
+                        <TableColumn fx:id="colPrecio" text="Precio" prefWidth="110"/>
+                        <TableColumn fx:id="colExistencia" text="Existencia" prefWidth="100"/>
+                    </columns>
+                    <contextMenu>
+                        <ContextMenu>
+                            <items>
+                                <MenuItem text="✏️ Editar" onAction="#editarProducto"/>
+                                <MenuItem text="🗑️ Eliminar" onAction="#eliminarProducto"/>
+                            </items>
+                        </ContextMenu>
+                    </contextMenu>
+                </TableView>
+            </TitledPane>
+        </VBox>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="8">
+            <padding>
+                <Insets top="8" right="16" bottom="10" left="16"/>
+            </padding>
+            <Label text="ℹ️"/>
+            <Label fx:id="mensajeLabel" text="Listo."/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
